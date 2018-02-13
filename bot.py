@@ -6,14 +6,9 @@ class Bot:
     def __init__(self):
         self.bot = Controller() # servo controller for the Tango bot
 
-    # bendTurn allows the Tango bot to turn or bend at one of its' joints
-    def bendTurn(self, port, target):
-        self.bot.setTarget(port, target)
-
-    ### WHEEL Methods ###
     # accelerate allows the gradual acceleration of the Tango bot, ensuring it does not fall over
     def accelerate(self, port, target):
-        pos = self.bot.getPosition(port) # find the current speed of the wheels
+        pos = self.position(port) # find the current speed of the wheels
         dist = pos - target # how far we have to accelerate
         direction = lambda x: x and (1, -1)[dist < 0] # the direction of acceleration
 
@@ -22,3 +17,10 @@ class Bot:
             pos += 1 * direction
             self.bot.setTarget(port, pos)
             time.sleep(.001)
+
+    # bendTurn allows the Tango bot to turn or bend at one of its' joints
+    def bendTurn(self, port, target):
+        self.bot.setTarget(port, target)
+
+    def position(self, port):
+        return self.bot.getPosition(port)
