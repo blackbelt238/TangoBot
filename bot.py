@@ -25,5 +25,5 @@ class Bot:
     def position(self, port):
         return self.bot.getPosition(port)
 
-    def wait(self, time):
+    def wait(time):
         time.sleep(time)

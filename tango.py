@@ -71,14 +71,14 @@ class Tango:
             # accelerate the wheels (L:-, R:+), leading to a left turn
             if pos < CENTER + TO_EXT:
                 self.tango.accelerate(DIFF, pos + inc)
-                self.tango.wait(length)
+                Bot.wait(length)
                 self.tango.accelerate(DIFF, pos)
         # right direction: TODO: check if this is correct
         elif direction == True:
             # accelerate the wheels (L:+, R:-), leading to a right turn
             if pos > CENTER - TO_EXT:
                 self.tango.accelerate(DIFF, pos - inc)
-                self.tango.wait(length)
+                Bot.wait(length)
                 self.tango.accelerate(DIFF, pos)
 
     # twist allows the Tango bot to twist at the waist along 3 degrees of resolution
