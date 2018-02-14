@@ -1,6 +1,4 @@
 from bot import Bot
-from Tkinter import *
-import os
 
 # Tango defines the behavior of a Tango bot
 class Tango:
@@ -42,11 +40,11 @@ class Tango:
         pos = self.tango.position(port) # determine the head's current position on the desired axis
         inc = self.TO_EXT // 5 # turn on 5 degrees/steps of resolution
 
-        # tilt the head down / turn it left TODO: CONFIRM THIS
+        # tilt the head down / turn it right
         if direction == False:
             if pos > self.CENTER - self.TO_EXT:
                 self.tango.bendTurn(port, pos - inc)
-        # tilt the head down / turn it right TODO: CONFIRM THIS
+        # tilt the head up / turn it left
         elif direction == True:
             if pos < self.CENTER + self.TO_EXT:
                 self.tango.bendTurn(port, pos + inc)
@@ -90,10 +88,9 @@ class Tango:
 
         # twist left
         if direction == False:
-            if pos > self.CENTER - self.TO_EXT:
-                self.tango.bendTurn(port, pos - inc)
+            if pos < self.CENTER + self.TO_EXT:
+                self.tango.bendTurn(self.WAIST, pos + inc)
         # twist right
         elif direction == True:
-            if pos < self.CENTER + self.TO_EXT:
-                self.tango.bendTurn(port, pos + inc)
-                
+            if pos > self.CENTER - self.TO_EXT:
+                self.tango.bendTurn(self.WAIST, pos - inc)
