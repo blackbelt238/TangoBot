@@ -58,6 +58,7 @@ class Tango:
 
     # stop brings a moving Tango bot to a stop
     def stop(self):
+        self.tango.accelerate(self.DIFF, self.CENTER)
         self.tango.accelerate(self.SAME, self.CENTER)
 
     # turn allows the Tango bot to turn left or right
@@ -65,14 +66,18 @@ class Tango:
         pos = self.tango.position(self.DIFF) # determine the wheels' current position
         inc = self.TO_EXT // 3 # accelerate with 3 speeds
 
-        # left turn TODO: check if this is correct
+        # ensure proper turn direction when going backwards
+        if pos > 6000:
+            direction = not direction
+
+        # left turn
         if direction == False:
-            # accelerate the wheels (L:-, R:+), leading to a left turn
+            # accelerate the wheels (L:-, R:0), leading to a left turn
             if pos < self.CENTER + self.TO_EXT:
                 self.tango.accelerate(self.DIFF, pos + inc)
-        # right direction: TODO: check if this is correct
+        # right direction
         elif direction == True:
-            # accelerate the wheels (L:+, R:-), leading to a right turn
+            # accelerate the wheels (L:0, R:-), leading to a right turn
             if pos > self.CENTER - self.TO_EXT:
                 self.tango.accelerate(self.DIFF, pos - inc)
 
