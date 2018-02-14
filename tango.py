@@ -5,7 +5,7 @@ class Tango:
     # ports with which to access servos on the robot
     WAIST = 0
     SAME = 1 # wheels spinning in the same direction
-    OPP = 2 # wheels spinning in the opposite direction
+    DIFF = 2 # wheels spinning in the opposite direction
     SIDE = 3 # head moving side-to-side
     UPDOWN = 4 # head moving up/down
 
@@ -62,24 +62,19 @@ class Tango:
 
     # turn allows the Tango bot to turn left or right
     def turn(self, direction):
-        pos = self.tango.position(DIFF) # determine the wheels' current position
+        pos = self.tango.position(self.DIFF) # determine the wheels' current position
         inc = self.TO_EXT // 3 # accelerate with 3 speeds
-        length = .005 # length of time to turn
 
         # left turn TODO: check if this is correct
         if direction == False:
             # accelerate the wheels (L:-, R:+), leading to a left turn
             if pos < self.CENTER + self.TO_EXT:
-                self.tango.accelerate(DIFF, pos + inc)
-                wait(length)
-                self.tango.accelerate(DIFF, pos)
+                self.tango.accelerate(self.DIFF, pos + inc)
         # right direction: TODO: check if this is correct
         elif direction == True:
             # accelerate the wheels (L:+, R:-), leading to a right turn
             if pos > self.CENTER - self.TO_EXT:
-                self.tango.accelerate(DIFF, pos - inc)
-                wait(length)
-                self.tango.accelerate(DIFF, pos)
+                self.tango.accelerate(self.DIFF, pos - inc)
 
     # twist allows the Tango bot to twist at the waist along 3 degrees of resolution
     def twist(self, direction):

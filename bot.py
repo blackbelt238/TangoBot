@@ -16,7 +16,7 @@ class Bot:
         for _ in range(abs(dist)):
             pos += 1 * direction
             self.bot.setTarget(port, pos)
-            time.sleep(.001)
+            time.sleep(.0005)
 
     # bendTurn allows the Tango bot to turn or bend at one of its' joints
     def bendTurn(self, port, target):
