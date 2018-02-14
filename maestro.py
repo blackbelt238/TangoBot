@@ -166,6 +166,3 @@ class Controller:
     def stopScript(self):
         cmd = chr(0x24)
         self.sendCmd(cmd)
-
-x = Controller()
-x.setTarget(0, 7800)
