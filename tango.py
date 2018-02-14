@@ -49,6 +49,27 @@ class Tango:
             if pos < CENTER + TO_EXT:
                 self.tango.bendTurn(port, pos + inc)
 
+    # reset sets all joints and wheel speeds to their central setting
+    def reset(self):
+        self.stop()
+        self.center(WAIST)
+        self.center(SIDE)
+        self.center(UPDOWN)
+
     # stop brings a moving Tango bot to a stop
     def stop(self):
         self.tango.accelerate(SAME, CENTER)
+
+    # twist allows the Tango bot to twist at the waist along 3 degrees of resolution
+    def twist(self, direction):
+        pos = self.tango.position(WAIST) # determine the waist's current position
+        inc = TO_EXT / 3 # twist on 3 degrees of resolution
+
+        # twist left
+        if direction == False:
+            if pos > CENTER - TO_EXT:
+                self.tango.bendTurn(port, pos - inc)
+        # twist right
+        elif direction == True:
+            if pos < CENTER + TO_EXT:
+                self.tango.bendTurn(port, pos + inc)
