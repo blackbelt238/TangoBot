@@ -1,4 +1,6 @@
 from bot import Bot
+from Tkinter import *
+import os
 
 # Tango defines the behavior of a Tango bot
 class Tango:
@@ -34,3 +36,22 @@ class Tango:
     # stop brings a moving Tango bot to a stop
     def stop(self):
         self.tango.accelerate(SAME, CENTER)
+
+class InputHandler:
+    def __init__(self):
+        os.system('xset r off')
+        self.tango = Tango() # Tango instance to issue commands
+        self.root = tkinter.Tk()
+
+    # Determine what to move from the key pressed.
+    def input_pressed(key):
+        print("Pressed {}".format(key))
+        self.tango.drive(-1)
+
+    # Slow down the robot on key release
+    def input_released(key):
+        print("Released {}".format(key))
+    root.bind('<KeyPress>', method_name)
+    root.bind('<KeyRelease>', method_name)
+
+start = InputHandler()
