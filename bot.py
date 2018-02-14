@@ -9,8 +9,8 @@ class Bot:
     # accelerate allows the gradual acceleration of the Tango bot, ensuring it does not fall over
     def accelerate(self, port, target):
         pos = self.position(port) # find the current speed of the wheels
-        dist = pos - target # how far we have to accelerate
-        direction = lambda x: x and (1, -1)[dist < 0] # the direction of acceleration
+        dist = target - pos # how far we have to accelerate
+        direction = -1 if dist < 0 else 1 # the direction of acceleration
 
         # incrementally set the speed of the wheels to the target speed
         for _ in range(abs(dist)):
