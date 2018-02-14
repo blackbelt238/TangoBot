@@ -28,12 +28,12 @@ class Tango:
         if direction == False:
             # negatively accelerate the tango bot as long as it is not moving at its' maximum backward speed
             if pos < self.CENTER + self.TO_EXT:
-                self.tango.accelerate(self.SAME, pos + inc)
+                self.tango.accelerate(self.SAME, pos + inc, .0005)
         # forward direction
         elif direction == True:
             # positively accelerate the tango bot as long as it is not moving at its' maximum forward speed
             if pos > self.CENTER - self.TO_EXT:
-                self.tango.accelerate(self.SAME, pos - inc)
+                self.tango.accelerate(self.SAME, pos - inc, .0005)
 
     # head allows the Tango bot's head to turn or tilt with 5 degrees of resolution
     def head(self, port, direction):
@@ -66,20 +66,16 @@ class Tango:
         pos = self.tango.position(self.DIFF) # determine the wheels' current position
         inc = self.TO_EXT // 3 # accelerate with 3 speeds
 
-        # ensure proper turn direction when going backwards
-        if pos > 6000:
-            direction = not direction
-
         # left turn
         if direction == False:
             # accelerate the wheels (L:-, R:0), leading to a left turn
             if pos < self.CENTER + self.TO_EXT:
-                self.tango.accelerate(self.DIFF, pos + inc)
+                self.tango.accelerate(self.DIFF, pos + inc, 0)
         # right direction
         elif direction == True:
             # accelerate the wheels (L:0, R:-), leading to a right turn
             if pos > self.CENTER - self.TO_EXT:
-                self.tango.accelerate(self.DIFF, pos - inc)
+                self.tango.accelerate(self.DIFF, pos - inc, 0)
 
     # twist allows the Tango bot to twist at the waist along 3 degrees of resolution
     def twist(self, direction):
