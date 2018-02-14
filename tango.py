@@ -15,6 +15,10 @@ class Tango:
     def __init__(self):
         self.tango = Bot() # bot instance for Tango bot
 
+    # center brings the given joint back to center
+    def center(self, port):
+        self.tango.bendTurn(port, CENTER)
+
     # drive allows the tango bot to drive forwards or backwards at 3 different speeds
     def drive(self, direction):
         pos = self.tango.position(SAME) # determine the wheels' current position
