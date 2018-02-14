@@ -35,7 +35,7 @@ class InputHandler:
     def char_released(self, key):
         if key.char is 'a':
             self.tango.turn(True)
-        if key.char is 'd':
+        elif key.char is 'd':
             self.tango.turn(False)
 
     def left_pressed(self, key):

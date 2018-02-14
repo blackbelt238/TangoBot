@@ -67,7 +67,7 @@ class Tango:
         inc = self.TO_EXT // 3 # accelerate with 3 speeds
 
         # ensure proper turn direction when going backwards
-        if pos > 6000:
+        if pos > 6500:
             direction = not direction
 
         # left turn
