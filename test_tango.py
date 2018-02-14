@@ -39,7 +39,8 @@ t.head(t.SIDE, False)
 t.head(t.SIDE, False)
 t.head(t.SIDE, False)
 
-# forward speed 1, turn left, continue forward, go backward speed 1, turn right, continue backward
+# a whole bunch of shit that is funny to watch
+t.drive(True)
 t.drive(True)
 time.sleep(1)
 
@@ -48,6 +49,8 @@ time.sleep(1)
 t.turn(True) # end turn
 time.sleep(1)
 
+t.drive(False)
+t.drive(False)
 t.drive(False)
 t.drive(False)
 time.sleep(1)
