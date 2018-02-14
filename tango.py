@@ -58,8 +58,8 @@ class Tango:
 
     # stop brings a moving Tango bot to a stop
     def stop(self):
-        self.tango.accelerate(self.DIFF, self.CENTER)
-        self.tango.accelerate(self.SAME, self.CENTER)
+        self.tango.accelerate(self.DIFF, self.CENTER, 0)
+        self.tango.accelerate(self.SAME, self.CENTER, .0005)
 
     # turn allows the Tango bot to turn left or right
     def turn(self, direction):
