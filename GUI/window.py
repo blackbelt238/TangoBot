@@ -5,9 +5,10 @@ class NestedWindow():
     sideHeight = 5
     vertWidth = 5
     vertHeight = 5
-    def __init__(self, part, r):
+    def __init__(self, part, r, queue):
         self.window = Toplevel(r)
         self.create_buttons(part)
+        self.queue = queue
 
     def create_buttons(self, robo_part):
         if robo_part == 'head':
@@ -83,6 +84,9 @@ class NestedWindow():
         rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
         rightTwo.grid(row=0, column=4)
 
+    def send_command(self):
+        return 1
+    
     def destroy_window(self):
         self.window.destroy()
 
@@ -103,6 +107,7 @@ class BlockWindow():
         self.create_buttons()
         self.create_command_boxes()
         self.c.pack()
+        self.queue = [None, None, None, None, None, None, None, None]
 
         self.current_command = 0
 
@@ -113,11 +118,28 @@ class BlockWindow():
         self.current_command += 1
 
     def make_nested(self, robo_part):
-        window = NestedWindow(robo_part, self.root)
+        window = NestedWindow(robo_part, self.root, self.queue)
 
     def remove_command(self, button_num):
-        print(button_num)
+        if self.queue[button_num] is not None:
+            self.current_command -= 1
+            self.queue[button_num] = None
+            del self.queue[button_num]
+            self.queue.append(None)
+        else:
+            print('Nothing here')
 
+    def convert_to_text(self):
+        pass
+    
+    def execute_commands(self):
+        # Should never be true while there is not 8 commands
+        if self.queue[7] is not None:
+            print('Executing')
+        else:
+            print('Add more commands')
+            
+    
     def create_buttons(self):
         head = Button(self.root, text = 'Head', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('head'))
         head.place(x=(self.commandButtonWidth * 2),y=0)
@@ -131,6 +153,8 @@ class BlockWindow():
         turn = Button(self.root, text = 'Turn', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('turn'))
         turn.place(x=(self.commandButtonWidth * 2),y=300)
 
+        execute = Button(self.root, text = 'Execute', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.execute_commands())
+        execute.place(x=(self.commandButtonWidth * 2),y=400)
     def create_command_boxes(self):
         self.boxes = []
         self.box_frame = Frame(self.root, width = 200, height = 480, bg='White')
@@ -138,7 +162,7 @@ class BlockWindow():
         #self.box_frame.pack()
         
         for i in range(8):
-            self.boxes.append(Button(self.box_frame, width = self.queueButtonWidth, height = self.queueButtonHeight, command = lambda i=i: self.remove_command(i)))
+            self.boxes.append(Button(self.box_frame, width = self.queueButtonWidth, height = self.queueButtonHeight, text = "1", command = lambda i=i: self.remove_command(i)))
             self.boxes[i].place(x=(self.commandButtonWidth * 3.0) + 20, y=(i*60))
 def main():
     root = Tk()
