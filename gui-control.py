@@ -11,12 +11,15 @@ class ActionQueue:
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
-    def add(self, function, direction):
+    def add(self, function, direction=None, port=None):
         action = [function] # form the action by first adding the function to be invoked
 
         # if a direction is provided, tack it on to the action (this allows us to add calls with no arguments to the queue)
         if direction != None:
             action.append(direction)
+        # if a port is provided, tack it on to the action
+        if port != None:
+            action.append(port)
         self.queue.append(action)
 
     # execute goes through the queued actions and executes them in-order
@@ -25,7 +28,9 @@ class ActionQueue:
             func = action[0]
 
             # if arguments must be provided to the function, do so. Otherwise, don't provide any.
-            if len(action) > 1:
+            if len(action > 2):
+                self.tango.func(action[1], action[2])
+            elif len(action) > 1:
                 self.tango.func(action[1])
             else:
                 self.tango.func()
@@ -42,7 +47,8 @@ class NestedWindow():
     sideHeight = 5
     vertWidth = 5
     vertHeight = 5
-    def __init__(self, part, r):
+    def __init__(self, part, r, queue):
+        self.queue = queue
         self.window = Toplevel(r)
         self.create_buttons(part)
 
@@ -57,28 +63,28 @@ class NestedWindow():
             self.turn_buttons()
 
     def head_buttons(self):
-        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.head,True,4))
         leftTwo.grid(row=2, column=0)
 
-        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.head,True,4))
         leftOne.grid(row=2, column=1)
 
-        upTwo = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        upTwo = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.head,True,5))
         upTwo.grid(row=0, column=2)
 
-        upOne = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        upOne = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.head,True,5))
         upOne.grid(row=1, column=2)
 
-        downTwo = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        downTwo = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.head,False,5))
         downTwo.grid(row=4, column=2)
 
-        downOne = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        downOne = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.head,False,5))
         downOne.grid(row=3, column=2)
 
-        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.head,False,4))
         rightOne.grid(row=2, column=3)
 
-        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.head,False,4))
         rightTwo.grid(row=2, column=4)
 
     def torso_buttons(self):
@@ -130,6 +136,7 @@ class BlockWindow():
     queueButtonWidth = 10
     queueButtonHeight = 3
     def __init__(self, r, c=None):
+        self.queue = ActionQueue()
         self.client = c
         self.root = r
         self.flag = True
@@ -150,7 +157,7 @@ class BlockWindow():
         self.current_command += 1
 
     def make_nested(self, robo_part):
-        window = NestedWindow(robo_part, self.root)
+        window = NestedWindow(robo_part, self.root, self.queue)
 
     def remove_command(self, button_num):
         print(button_num)
