@@ -36,7 +36,7 @@ class Tango:
                 self.tango.accelerate(self.SAME, pos - inc, .0005)
 
     # head allows the Tango bot's head to turn or tilt with 5 degrees of resolution
-    def head(self, port, direction):
+    def head(self, direction, port):
         pos = self.tango.position(port) # determine the head's current position on the desired axis
         inc = self.TO_EXT // 5 # turn on 5 degrees/steps of resolution
 
