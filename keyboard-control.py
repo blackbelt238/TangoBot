@@ -39,14 +39,14 @@ class InputHandler:
             self.tango.turn(False)
 
     def left_pressed(self, key):
-        self.tango.head(self.tango.SIDE, True)
+        self.tango.head(True, self.tango.SIDE)
 
     def right_pressed(self, key):
-        self.tango.head(self.tango.SIDE, False)
+        self.tango.head(False, self.tango.SIDE)
 
     def up_pressed(self, key):
-        self.tango.head(self.tango.UPDOWN, True)
+        self.tango.head(True, self.tango.UPDOWN)
 
     def down_pressed(self, key):
-        self.tango.head(self.tango.UPDOWN, False)
+        self.tango.head(False, self.tango.UPDOWN)
 start = InputHandler()
