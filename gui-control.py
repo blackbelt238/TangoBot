@@ -225,7 +225,7 @@ class BlockWindow():
             box = self.boxes[index]
             fname = action[0].__name__[action[0].__name__.rfind('.')+1:]
             box.config(text=fname)
-            index++
+            index += 1
         for i in range(index, 8):
             self.boxes[i].config(text='')
 
