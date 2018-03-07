@@ -51,6 +51,8 @@ class ActionQueue:
 
     # remove takes the action at the given index out of the action queue
     def remove(self, index):
+        if len(self.queue) < index + 1:
+            return
         self.queue.pop(index)
 
     # set_distance sets the distance of turn rotation
