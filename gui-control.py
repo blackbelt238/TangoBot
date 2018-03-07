@@ -88,42 +88,48 @@ class NestedWindow():
         rightTwo.grid(row=2, column=4)
 
     def torso_buttons(self):
-        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.twist,False))
         leftTwo.grid(row=0, column=0)
 
-        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.twist,False))
         leftOne.grid(row=0, column=1)
 
-        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.twist,True))
         rightOne.grid(row=0, column=3)
 
-        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.twist,True))
         rightTwo.grid(row=0, column=4)
 
     def drive_buttons(self):
-        forwardOne = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        forwardOne = Button(self.window, text = '^\n^', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.drive,True))
         forwardOne.grid(row=0, column=0)
 
-        forwardTwo = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
+        forwardTwo = Button(self.window, text = '^\n', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.drive,True))
         forwardTwo.grid(row=1, column=0)
 
-        backwardOne = Button(self.window, text = 'v\n', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
-        backwardOne.grid(row=2, column=0)
+        stop = Button(self.window, text = 'STOP', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.stop))
+        stop.grid(row=2, column=0)
 
-        backwardTwo = Button(self.window, text = 'v\nv', width = self.vertWidth, height = self.vertHeight, command = self.destroy_window)
-        backwardTwo.grid(row=3, column=0)
+        backwardOne = Button(self.window, text = 'v\n', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.drive,False))
+        backwardOne.grid(row=3, column=0)
+
+        backwardTwo = Button(self.window, text = 'v\nv', width = self.vertWidth, height = self.vertHeight, command = self.queue.add(self.queue.tango.drive,False))
+        backwardTwo.grid(row=4, column=0)
 
     def turn_buttons(self):
-        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftTwo = Button(self.window, text = '< <', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.turn,False))
         leftTwo.grid(row=0, column=0)
 
-        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        leftOne = Button(self.window, text = ' < ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.turn,False))
         leftOne.grid(row=0, column=1)
 
-        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        stop = Button(self.window, text = 'STOP', width = self.vertWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.drive))
+        stop.grid(row=0, column=2)
+
+        rightOne = Button(self.window, text = ' > ', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.turn,True))
         rightOne.grid(row=0, column=3)
 
-        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.destroy_window)
+        rightTwo = Button(self.window, text = '> >', width = self.sideWidth, height = self.sideHeight, command = self.queue.add(self.queue.tango.turn,True))
         rightTwo.grid(row=0, column=4)
 
     def destroy_window(self):
