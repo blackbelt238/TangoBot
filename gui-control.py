@@ -7,7 +7,8 @@ class ActionQueue:
     def __init__(self):
         self.tango = Tango()
         self.queue = [] # queue of actions
-        self.pause = 1
+
+        self.distance = 0 # distance is how long we want to wait to go a certain distance
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
@@ -42,6 +43,10 @@ class ActionQueue:
     # remove takes the action at the given index out of the action queue
     def remove(self, index):
         self.queue.pop(index)
+
+    # foot calculates the amount of sleep time for the robot to drive num feet
+    def foot(num):
+        return .025*(num**2) + .3*num - .125
 
 class NestedWindow():
     sideWidth = 5
