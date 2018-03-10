@@ -6,11 +6,11 @@ from tkinter import *
 class ActionQueue:
     def __init__(self):
         self.tango = Tango()
-        self.queue = [] # queue of actions
+        self.queue = []    # queue of actions
 
-        self.degree = 0
-        self.distance = 0 # distance is how long we want to wait to go a certain distance
-        self.pause = 1
+        self.degree = []   # keep track of how long to wait to turn the desired number of degrees
+        self.distance = [] # keep track of how long to wait to go a certain distance
+        self.pause = 1     # sleep time between all queued actions
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
@@ -31,37 +31,37 @@ class ActionQueue:
         for action in self.queue:
             func = action[0]
 
-            # if arguments must be provided to the function, do so. Otherwise, don't provide any.
+            # if arguments must be provided to call the function, do so. Otherwise, don't provide any.
             if len(action) > 2:
                 func(action[1], action[2])
             elif len(action) > 1:
                 func(action[1])
 
-                # sleep for the necessary amount of time
+                # if executing a wheel-related action, sleep for the necessary amount of time
                 if func == self.tango.drive:
-                    time.sleep(self.distance)
+                    time.sleep(self.distance.pop(0))
                 elif func == self.tango.turn:
-                    time.sleep(self.degree)
-                self.tango.stop() # stop after driving or turning
+                    time.sleep(self.degree.pop(0))
+                self.tango.stop() # stop after driving or turning (no effect if not moving)
             else:
                 func()
             time.sleep(self.pause) # pause for the specified time
-
         self.tango.reset() # avoid out of control bot after the execution of the user's commands
 
     # remove takes the action at the given index out of the action queue
     def remove(self, index):
+        # disallow attempted removal of items outside the list
         if len(self.queue) < index + 1:
             return
         self.queue.pop(index)
 
     # set_distance sets the distance of turn rotation
     def set_degree(self, deg):
-        self.degree = ActionQueue.angle(deg)
+        self.degree.append(ActionQueue.angle(deg))
 
     # set_distance sets the distance of drive travel
     def set_distance(self, num):
-        self.distance = ActionQueue.foot(num)
+        self.distance.append(ActionQueue.foot(num))
 
     # foot calculates the amount of sleep time for the robot to drive num feet
     def foot(num):
@@ -71,6 +71,7 @@ class ActionQueue:
     def angle(deg):
         return -.00002304527*(deg**2) + .0144444444*deg - .3833333333
 
+# NestedWindow represents a window that is opened up by a BlockWindow
 class NestedWindow():
     sideWidth = 5
     sideHeight = 5
@@ -79,9 +80,10 @@ class NestedWindow():
     def __init__(self, part, r, queue):
         self.queue = queue
         self.window = Toplevel(r)
-        self.window.title(part)
+        self.window.title(part) # name the window according to what it's controlling
         self.create_buttons(part)
 
+    # create_buttons
     def create_buttons(self, robo_part):
         if robo_part == 'head':
             self.head_buttons()
@@ -92,6 +94,7 @@ class NestedWindow():
         elif robo_part == 'turn':
             self.turn_buttons()
 
+    # head_buttons populates the window with all buttons relating to operating the head
     def head_buttons(self):
         left = Button(self.window, text = 'LEFT', width = self.sideWidth, height = self.sideHeight, command = lambda: self.queue.add(self.queue.tango.head,True,3))
         left.grid(row=1, column=0)
@@ -138,6 +141,7 @@ class NestedWindow():
         five = Button(self.window, text = '5', width = self.vertWidth, height = self.vertHeight // 2, command = lambda: self.queue.set_distance(5))
         five.grid(row=4, column=1)
 
+    # turn_buttons populates the window with all buttons relating to getting the robot to turn
     def turn_buttons(self):
         # buttons for causing a turn
         left = Button(self.window, text = 'LEFT', width = self.vertWidth, height = self.vertHeight, command = lambda: self.queue.add(self.queue.tango.turn,False))
@@ -156,9 +160,11 @@ class NestedWindow():
         oneeighty = Button(self.window, text = '180 deg', width = self.vertWidth, height = self.vertHeight // 2, command = lambda: self.queue.set_degree(180))
         oneeighty.grid(row=2, column=1)
 
+    # destroy_window kills the nested window
     def destroy_window(self):
         self.window.destroy()
 
+# BlockWindow is the home window for controlling Tango
 class BlockWindow():
     commandButtonWidth = 10
     commandButtonHeight = 5
@@ -166,8 +172,8 @@ class BlockWindow():
     queueButtonWidth = 10
     queueButtonHeight = 3
     def __init__(self, r, c=None):
-        self.queue = ActionQueue()
-        self.queue.tango.reset() # reset everything before continuing
+        self.queue = ActionQueue() # keep track of actions
+        self.queue.tango.reset()   # reset everything before continuing
 
         self.client = c
         self.root = r
@@ -216,6 +222,8 @@ class BlockWindow():
         for i in range(8):
             self.boxes.append(Button(self.box_frame, width = self.queueButtonWidth, height = self.queueButtonHeight // 2, command = lambda i=i: self.remove_command(i)))
             self.boxes[i].place(x=(self.commandButtonWidth * 3.0) + 20, y=(i*30))
+
+        # create the execute button below the queue of actions
         ex = Button(self.box_frame, text = 'Execute', width = self.queueButtonWidth, height = self.queueButtonHeight, command = lambda: self.queue.execute())
         self.boxes.append(ex)
         ex.place(x=(self.commandButtonWidth * 3.0) + 20, y=240)
@@ -223,18 +231,20 @@ class BlockWindow():
     # update_command_boxes ensures the command box names are consistent with the actions in them
     def update_command_boxes(self, event = None):
         index = 0
+        # update all boxes referring to actions
         for action in self.queue.queue:
             box = self.boxes[index]
             fname = action[0].__name__[action[0].__name__.rfind('.')+1:]
             box.config(text=fname)
             index += 1
+        # clear all boxes no longer referring to actions
         for i in range(index, 8):
             self.boxes[i].config(text='')
 
 def main():
     root = Tk()
-    gui = BlockWindow(root)
-    root.bind('<FocusIn>', gui.update_command_boxes)
+    gui = BlockWindow(root) # create the GUI
+    root.bind('<FocusIn>', gui.update_command_boxes) # ensures the command boxes update every time focus returns to the window
     root.mainloop()
 
 main()
