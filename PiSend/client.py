@@ -25,3 +25,4 @@ def sendTextToAndroid(message):
     finally:
         # close the connection no matter what
         s.close()
+sendTextToAndroid('Waffles are better than pancakes')
