@@ -1,26 +1,31 @@
 import socket
 
-# create a socket object
-serversocket = socket.socket(
-	        socket.AF_INET, socket.SOCK_STREAM)
-
-# get local machine name
-host = socket.gethostname()
-
-port = 9999
-
-# bind to the port
-serversocket.bind((host, port))
-
-# queue up to 5 requests
-serversocket.listen(5)
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create a TCP/IP socket object
+saddr = (socket.gethostname(), 9999)                             # create the server address using the local machine name
+serversocket.bind(saddr)                                         # bind to the port
+serversocket.listen(5)                                           # listen for up to 5 incoming connections
 
 while True:
-   # establish a connection
-   clientsocket,addr = serversocket.accept()
+    # wait for a connection
+    clientsocket, addr = serversocket.accept()
+    try:
+        print('connection from', addr)
 
-   print("Got a connection from %s" % str(addr))
-
-   msg = 'Thank you for connecting'+ "\r\n"
-   clientsocket.send(msg.encode('ascii'))
-   clientsocket.close()
+        # Receive the data in small chunks and retransmit it
+        while True:
+            data = clientsocket.recv(16)
+            print('received {!r}'.format(data))
+            if data:
+                print('sending data back to the client')
+                clientsocket.sendall(data)
+            else:
+                print('no data from', addr)
+                break
+    finally:
+        # Clean up the connection
+        clientsocket.close()
+   # print("Got a connection from %s" % str(addr))
+   #
+   # msg = 'Thank you for connecting'+ "\r\n"
+   # clientsocket.send(msg.encode('ascii'))
+   # clientsocket.close()
