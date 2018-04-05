@@ -14,7 +14,7 @@ while True:
         # Receive the data in small chunks and retransmit it
         while True:
             data = clientsocket.recv(16)
-            print('received {!r}'.format(data))
+            print('received {}'.format(data.decode('ascii')))
             if data:
                 print('sending data back to the client')
                 clientsocket.sendall(data)
@@ -22,10 +22,5 @@ while True:
                 print('no data from', addr)
                 break
     finally:
-        # Clean up the connection
+        # Clean up the connection no matter what
         clientsocket.close()
-   # print("Got a connection from %s" % str(addr))
-   #
-   # msg = 'Thank you for connecting'+ "\r\n"
-   # clientsocket.send(msg.encode('ascii'))
-   # clientsocket.close()

@@ -5,26 +5,23 @@ serv_addr = (socket.gethostname(), 9999)              # create the server addres
 s.connect(serv_addr)                                  # connection to hostname on the port.
 
 try:
-
     # Send data
-    message = b'This is the message.  It will be repeated.'
+    message = 'This is the message. It will be echoed.'
     print('sending {!r}'.format(message))
-    s.sendall(message)
+    s.sendall(message.encode('ascii'))
 
     # Look for the response
     amount_received = 0
     amount_expected = len(message)
+    echo = ''
 
+    # incrementally reconstruct the message
     while amount_received < amount_expected:
         data = s.recv(16)
+        echo += data.decode('ascii')
         amount_received += len(data)
-        print('received {!r}'.format(data))
+    print("\nServer echoed:", echo)
 
 finally:
-    print('closing socket')
+    # close the connection no matter what
     s.close()
-# # Receive no more than 1024 bytes
-# msg = s.recv(1024)
-#
-# s.close()
-# print (msg.decode('ascii'))
