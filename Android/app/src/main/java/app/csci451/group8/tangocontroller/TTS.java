@@ -43,33 +43,18 @@ public class TTS extends Thread implements TextToSpeech.OnInitListener {
         }
     }
 
+    public void destroy() {
+        tts.shutdown();
+    }
+
     public void run() {
         Looper.prepare();
             handler = new Handler() {
                 public void handleMessage(Message msg) {
                     String response = msg.getData().getString("TT");
-                    speakOut(response);
+                    tts.speak(response, TextToSpeech.QUEUE_FLUSH, null);
                 }
             };
         Looper.loop();
-    }
-
-    public void speakOut(String text) {
-        if (last != text) {
-            last = text;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-            } else {
-                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-            }
-
-            while (tts.isSpeaking()) {
-                try {
-                    Thread.sleep(200);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }

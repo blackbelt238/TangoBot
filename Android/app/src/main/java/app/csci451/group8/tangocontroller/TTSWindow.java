@@ -25,8 +25,9 @@ public class TTSWindow extends AppCompatActivity implements View.OnClickListener
 
 
     protected void onDestroy() {
+        tts.destroy();
         super.onDestroy();
-        unbindService(tts);
+        //unbindService(tts);
     }
 
 

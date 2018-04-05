@@ -47,5 +47,15 @@
             android:layout_alignStart="@+id/enterTtsView"
             android:layout_centerVertical="true"
             android:text="Button" />
+
+        <Button
+            android:id="@+id/sttButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enterTtsView"
+            android:layout_alignStart="@+id/enterTtsView"
+            android:layout_below="@+id/enterTtsView"
+            android:layout_marginTop="47dp"
+            android:text="STT" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
