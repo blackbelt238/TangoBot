@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.clientButton:
-                Client client = new Client("10.200.42.197", 5011, clientText);
+                Client client = new Client("10.180.151.248", 5011, clientText.getText().toString());
                 client.execute();
                 break;
         }
