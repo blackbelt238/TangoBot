@@ -24,7 +24,7 @@ class Server:
                 # see if it matches any predetermined commands
                 if msg == 'start' or msg == 'continue':
                     Server.actionqueue.execute()
-                elif msg = 'say hello':
+                elif msg == 'say hello':
                     # Tango says "hello" and raises his head
                     self.queue.push(self.queue.tango.head,False,4)
                     self.queue.push(self.queue.tango.head,True,4)

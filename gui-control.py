@@ -30,7 +30,7 @@ class ActionQueue:
             ex. to make the robot MOVE_FORWARD->TURN_HEAD->MOVE_BACKWARD, first push MOVE_BACKWARD, then TURN_HEAD, and finally MOVE_FORWARD '''
         self.queue.insert(0, self.buildAction(function, direction, port))
 
-    def buildAction(self, function, direction=None, port=None):
+    def buildAction(function, direction=None, port=None):
         ''' buildAction returns the action formatted as a list to be added to the queue '''
         print('\tadding:', function, direction, port)
         action = [function] # form the action by first adding the function to be invoked
