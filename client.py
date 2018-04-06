@@ -2,7 +2,7 @@ import socket
 
 class Client:
     ''' Client allows the sending of messages to a server address '''
-    saddr = (socket.gethostname(), 9999) # server address using the local machine name
+    saddr = ('100.99.197.145', 5011) # server address using the local machine name
 
     def sendMessage(message):
         ''' sendMessage takes in a message, sends it to the server at saddr, and returns the response '''
@@ -13,6 +13,7 @@ class Client:
         try:
             # Send the message across the socket
             print('sending {!r}'.format(message))
+            message += '\n'
             s.sendall(message.encode('ascii'))
 
             # return the response
@@ -21,5 +22,3 @@ class Client:
         # close the connection no matter what
         finally:
             s.close()
-
-print("\nServer echoed:", Client.sendMessage('Waffles are better than pancakes'))

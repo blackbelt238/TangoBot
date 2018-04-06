@@ -1,4 +1,3 @@
-import threading
 import time
 from server import Server
 from tango import Tango
@@ -15,12 +14,23 @@ class ActionQueue:
         self.pause = 1     # sleep time between all queued actions
 
         # feed this ActionQueue to the server and kick it off in the background
-        Server.actionqueue = self
-        threading.Thread(target=Server.start).start()
+        self.server = Server(self)
+        self.server.start()
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
     def add(self, function, direction=None, port=None):
+        self.queue.append(self.buildAction(function, direction, port))
+
+    def push(self, function, direction=None, port=None):
+        ''' push adds an action to the front of the queue.
+
+            if adding a series of actions, push in the reverse order of desired execution
+            ex. to make the robot MOVE_FORWARD->TURN_HEAD->MOVE_BACKWARD, first push MOVE_BACKWARD, then TURN_HEAD, and finally MOVE_FORWARD '''
+        self.queue.insert(0, self.buildAction(function, direction, port))
+
+    def buildAction(self, function, direction=None, port=None):
+        ''' buildAction returns the action formatted as a list to be added to the queue '''
         print('\tadding:', function, direction, port)
         action = [function] # form the action by first adding the function to be invoked
 
@@ -30,12 +40,12 @@ class ActionQueue:
         # if a port is provided, tack it on to the action
         if port != None:
             action.append(port)
-        self.queue.append(action)
+        return action
 
-    # execute goes through the queued actions and executes them in-order
     def execute(self):
-        for action in self.queue:
-            func = action[0]
+        ''' execute goes through the queued actions and executes them in-order '''
+        for i, action in enumerate(self.queue):
+            func = action[0] # pull out the function name
 
             # if arguments must be provided to call the function, do so. Otherwise, don't provide any.
             if len(action) > 2:
@@ -50,6 +60,10 @@ class ActionQueue:
                     time.sleep(self.degree.pop(0))
                 self.tango.stop() # stop after driving or turning (no effect if not moving)
             else:
+                # if nothing was given, the robot must pause to listen
+                if func == None:
+                    self.queue = self.queue[i+1:] # remove any actions already executed
+                    return                        # halt execution immediately
                 func()
             time.sleep(self.pause) # pause for the specified time
         self.tango.reset() # avoid out of control bot after the execution of the user's commands
@@ -233,6 +247,9 @@ class BlockWindow():
 
         speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
         speak.place(x=(self.commandButtonWidth * 2),y=400)
+
+        listen = Button(self.root, text = 'Listen', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.queue.add(None)) # the None here leads to pausing during execution
+        listen.place(x=(self.commandButtonWidth * 2),y=500)
 
     def create_command_boxes(self):
         self.boxes = []

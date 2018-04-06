@@ -57,9 +57,9 @@ class Tango:
         self.center(self.SIDE)
         self.center(self.UPDOWN)
 
-    def speak(phrase):
+    def speak(self, phrase):
         ''' speak sends the given message to Android to convert to speech '''
-        Client.sendMessage(phrase)
+        Client.sendMessage('<speak> ' + phrase)
 
     # stop brings a moving Tango bot to a stop
     def stop(self):
