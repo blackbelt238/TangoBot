@@ -22,5 +22,3 @@ class Client:
         # close the connection no matter what
         finally:
             s.close()
-
-print("\nServer response:", Client.sendMessage('continue'))
