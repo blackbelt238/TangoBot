@@ -1,4 +1,5 @@
 from bot import Bot
+from client import Client
 
 # Tango defines the behavior of a Tango bot
 class Tango:
@@ -55,6 +56,10 @@ class Tango:
         self.center(self.WAIST)
         self.center(self.SIDE)
         self.center(self.UPDOWN)
+
+    def speak(self, phrase):
+        ''' speak sends the given message to Android to convert to speech '''
+        Client.sendMessage(phrase)
 
     # stop brings a moving Tango bot to a stop
     def stop(self):
