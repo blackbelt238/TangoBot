@@ -13,6 +13,7 @@ class Client:
         try:
             # Send the message across the socket
             print('sending {!r}'.format(message))
+            message += '\n'
             s.sendall(message.encode('ascii'))
 
             # return the response
@@ -22,4 +23,4 @@ class Client:
         finally:
             s.close()
 
-print("\nServer echoed:", Client.sendMessage('Waffles are better than pancakes'))
+print("\nServer response:", Client.sendMessage('continue'))
