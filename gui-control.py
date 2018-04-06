@@ -15,8 +15,8 @@ class ActionQueue:
         self.pause = 1     # sleep time between all queued actions
 
         # feed this ActionQueue to the server and kick it off in the background
-        Server.actionqueue = self
-        threading.Thread(target=Server.start).start()
+        self.server = Server(self)
+        self.server.start()
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
