@@ -4,7 +4,7 @@ from threading import Thread
 class Server(Thread):
     ''' Server allows the standing up of a server to listen for connections, echoing back any message it recieves '''
 
-    def __init__(self, aq, addr=socket.gethostname(), port=9999):
+    def __init__(self, aq, addr=socket.gethostbyname(socket.gethostname()), port=5011):
         Thread.__init__(self)
         self.saddr = (addr, port)  # create the server address using the local machine name
         self.actionqueue = aq      # the ActionQueue the server is running alongside
