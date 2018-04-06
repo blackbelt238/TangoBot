@@ -238,6 +238,9 @@ class BlockWindow():
         speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
         speak.place(x=(self.commandButtonWidth * 2),y=400)
 
+        listen = Button(self.root, text = 'Listen', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.queue.add(None)) # the None here leads to pausing during execution
+        listen.place(x=(self.commandButtonWidth * 2),y=500)
+
     def create_command_boxes(self):
         self.boxes = []
         self.box_frame = Frame(self.root, width = 200, height = 480, bg='White')
