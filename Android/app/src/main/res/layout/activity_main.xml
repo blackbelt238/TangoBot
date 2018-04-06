@@ -12,50 +12,41 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="2dp">
 
-        <EditText
-            android:id="@+id/textChange"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_alignLeft="@+id/changeText"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/changeText"
-            android:layout_marginBottom="37dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/messageView"
+            android:layout_width="109dp"
+            android:layout_height="289dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="23dp"
+            android:text="Client Message" />
 
-        <Button
-            android:id="@+id/enterTtsView"
+        <TextView
+            android:id="@+id/ipNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="29dp"
-            android:layout_marginStart="29dp"
-            android:layout_marginTop="34dp"
-            android:text="Set TTS"
-            app:layout_constraintBottom_toTopOf="@+id/textChange"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="38dp"
+            android:text="IP NUMBER" />
 
         <Button
-            android:id="@+id/changeText"
+            android:id="@+id/clientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/enterTtsView"
-            android:layout_alignStart="@+id/enterTtsView"
-            android:layout_centerVertical="true"
+            android:layout_alignBaseline="@+id/ipNum"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="60dp"
             android:text="Button" />
 
-        <Button
-            android:id="@+id/sttButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/enterTtsView"
-            android:layout_alignStart="@+id/enterTtsView"
-            android:layout_below="@+id/enterTtsView"
-            android:layout_marginTop="47dp"
-            android:text="STT" />
+        <TextView
+            android:id="@+id/clientText"
+            android:layout_width="136dp"
+            android:layout_height="284dp"
+            android:layout_alignStart="@+id/clientButton"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="-19dp"
+            android:text="This is a message to send to the client" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
