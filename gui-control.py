@@ -21,6 +21,17 @@ class ActionQueue:
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
     def add(self, function, direction=None, port=None):
+        self.queue.append(self.buildAction(function, direction, port))
+
+    def push(self, function, direction=None, port=None):
+        ''' push adds an action to the front of the queue.
+
+            if adding a series of actions, push in the reverse order of desired execution
+            ex. to make the robot MOVE_FORWARD->TURN_HEAD->MOVE_BACKWARD, first push MOVE_BACKWARD, then TURN_HEAD, and finally MOVE_FORWARD '''
+        self.queue.insert(0, self.buildAction(function, direction, port))
+
+    def buildAction(self, function, direction=None, port=None):
+        ''' buildAction returns the action formatted as a list to be added to the queue '''
         print('\tadding:', function, direction, port)
         action = [function] # form the action by first adding the function to be invoked
 
@@ -30,7 +41,7 @@ class ActionQueue:
         # if a port is provided, tack it on to the action
         if port != None:
             action.append(port)
-        self.queue.append(action)
+        return action
 
     def execute(self):
         ''' execute goes through the queued actions and executes them in-order '''

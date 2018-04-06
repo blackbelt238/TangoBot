@@ -22,7 +22,13 @@ class Server:
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
 
                 # see if it matches any predetermined commands
-                if msg == 'start':
+                if msg == 'start' or msg == 'continue':
+                    Server.actionqueue.execute()
+                elif msg = 'say hello':
+                    # Tango says "hello" and raises his head
+                    self.queue.push(self.queue.tango.head,False,4)
+                    self.queue.push(self.queue.tango.head,True,4)
+                    Server.actionqueue.queue.push(self.queue.tango.speak,'hello')
                     Server.actionqueue.execute()
         finally:
             # Clean up the connection no matter what
