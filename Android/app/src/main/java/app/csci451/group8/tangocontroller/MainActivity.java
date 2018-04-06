@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView responses, clientText;
     Button clientButton;
     Server server;
+    TTS tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clientButton.setOnClickListener(this);
 
         TextView ipNum = findViewById(R.id.ipNum);
+        tts = new TTS(this);
+        tts.start();
 
         server = new Server(this);
         ipNum.setText(server.getIpAddress());
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.clientButton:
-                Client client = new Client("10.180.151.248", 5011, clientText.getText().toString());
+                Client client = new Client(getString(R.string.pi_ip), 5011, clientText.getText().toString());
                 client.execute();
                 break;
         }

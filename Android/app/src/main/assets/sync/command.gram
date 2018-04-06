@@ -2,6 +2,20 @@
 
 grammar command;
 
-<primary_command> = drive;
+<primary_command> = /11/ <drive> | /10/ <turn> | /1/ <speak>;
+
+<speak> = speak hello there;
+
+<drive> = drive <direction> <digit>;
+
+<turn> = turn <turn_dir> <angle>;
+
+<turn_dir> = left | right;
+
+<angle> = (forty-five | ninety) degrees;
+
+<direction> = forward | backward;
+
+<digit> = one | two | three | four | five | six | seven | eight | nine;
 
 public <command> = <primary_command>;
