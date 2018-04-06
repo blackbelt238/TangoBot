@@ -91,6 +91,8 @@ class NestedWindow():
             self.torso_buttons()
         elif robo_part == 'drive':
             self.drive_buttons()
+        elif robo_part == 'speak':
+            self.speak_buttons()
         elif robo_part == 'turn':
             self.turn_buttons()
 
@@ -141,6 +143,13 @@ class NestedWindow():
         five = Button(self.window, text = '5', width = self.vertWidth, height = self.vertHeight // 2, command = lambda: self.queue.set_distance(5))
         five.grid(row=4, column=1)
 
+    def speak_buttons(self):
+        p1 = Button(self.window, text='\"Ironic\"', width = self.sideWidth, height = self.sideHeight, command = lambda: self.queue.add(self.queue.tango.speak,'ironic'))
+        p1.grid(row=0, column=0)
+
+        p2 = Button(self.window, text='\"In Response\"', width = self.sideWidth, height = self.sideHeight, command = lambda: self.queue.add(self.queue.tango.speak,'in response'))
+        p2.grid(row=0, column=1)
+        
     # turn_buttons populates the window with all buttons relating to getting the robot to turn
     def turn_buttons(self):
         # buttons for causing a turn
@@ -195,6 +204,7 @@ class BlockWindow():
         self.current_command += 1
 
     def make_nested(self, robo_part):
+        ''' make_nested creates a nested window representing the control of the given part '''
         window = NestedWindow(robo_part, self.root, self.queue)
 
     def remove_command(self, button_num):
@@ -202,6 +212,7 @@ class BlockWindow():
         self.update_command_boxes()
 
     def create_buttons(self):
+        ''' create_buttons places the main command buttons on the screen '''
         head = Button(self.root, text = 'Head', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('head'))
         head.place(x=(self.commandButtonWidth * 2),y=0)
 
@@ -213,6 +224,9 @@ class BlockWindow():
 
         turn = Button(self.root, text = 'Turn', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('turn'))
         turn.place(x=(self.commandButtonWidth * 2),y=300)
+
+        speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
+        turn.place(x=(self.commandButtonWidth * 2),y=400)
 
     def create_command_boxes(self):
         self.boxes = []
