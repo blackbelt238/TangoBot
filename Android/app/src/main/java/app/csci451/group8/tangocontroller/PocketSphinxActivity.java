@@ -66,7 +66,9 @@ public class PocketSphinxActivity extends Activity implements
     private static final String MENU_SEARCH = "menu";
 
     /* Keyword we are looking for to activate menu */
-    private static final String KEYPHRASE = "oh mighty computer";
+    private static final String KEYPHRASE = "okay robot";
+    private static final String EXIT = "exit";
+    private static final String SENDCOMMAND = "send command";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -158,6 +160,10 @@ public class PocketSphinxActivity extends Activity implements
             recognizer.cancel();
             recognizer.shutdown();
         }
+
+        if (tts != null) {
+            tts.destroy();
+        }
     }
 
     /**
@@ -173,6 +179,13 @@ public class PocketSphinxActivity extends Activity implements
         String text = hypothesis.getHypstr();
         if (text.equals(KEYPHRASE))
             switchSearch(MENU_SEARCH);
+        else if (text.equals(EXIT)) {
+            System.out.println("Trying to exit");
+            finish();
+        }
+        else if (text.equals(SENDCOMMAND)) {
+            switchSearch(SENDCOMMAND);
+        }
         else if (text.equals(DIGITS_SEARCH))
             switchSearch(DIGITS_SEARCH);
         else if (text.equals(PHONE_SEARCH))
@@ -191,11 +204,7 @@ public class PocketSphinxActivity extends Activity implements
         ((TextView) findViewById(R.id.result_text)).setText("");
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
-            Message sendMsg = tts.handler.obtainMessage();
-            Bundle b = new Bundle();
-            b.putString("TT", text);
-            sendMsg.setData(b);
-            tts.handler.sendMessage(sendMsg);
+
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
     }
@@ -210,11 +219,6 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onEndOfSpeech() {
         if (!recognizer.getSearchName().equals(KWS_SEARCH)) {
-//            Message sendMsg = tts.handler.obtainMessage();
-//            Bundle b = new Bundle();
-//            b.putString("TT", spokenString);
-//            sendMsg.setData(b);
-//            tts.handler.sendMessage(sendMsg);
             switchSearch(KWS_SEARCH);
         }
     }
@@ -251,6 +255,8 @@ public class PocketSphinxActivity extends Activity implements
 
         // Create keyword-activation search.
         recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
+        recognizer.addKeyphraseSearch(KWS_SEARCH, EXIT);
+        recognizer.addKeyphraseSearch(KWS_SEARCH, SENDCOMMAND);
 
         // Create grammar-based search for selection between demos
         File menuGrammar = new File(assetsDir, "menu.gram");

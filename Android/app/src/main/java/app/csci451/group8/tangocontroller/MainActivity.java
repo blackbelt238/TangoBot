@@ -17,35 +17,37 @@ import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    TextView responses, clientText;
+    Button clientButton;
+    Server server;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button talkActivityButton = findViewById(R.id.enterTtsView);
-        Button changeTextButton = findViewById(R.id.changeText);
-        talkActivityButton.setOnClickListener(this);
-        changeTextButton.setOnClickListener(this);
+        responses = findViewById(R.id.messageView);
+        clientText = findViewById(R.id.clientText);
 
+        clientButton = findViewById(R.id.clientButton);
+        clientButton.setOnClickListener(this);
+
+        TextView ipNum = findViewById(R.id.ipNum);
+
+        server = new Server(this);
+        ipNum.setText(server.getIpAddress());
         Intent speech = new Intent(this, PocketSphinxActivity.class);
         startActivity(speech);
 
-//        sr = SpeechRecognizer.createSpeechRecognizer(this);
-//        sr.setRecognitionListener(new SpeechListener());
-//        sr.startListening(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
     }
 
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.clientButton:
+                Client client = new Client("10.200.42.197", 5011, clientText);
+                client.execute();
+                break;
+        }
     }
 
-    private void enterTTS() {
-        Intent tts = new Intent(this, TTSWindow.class);
-        startActivity(tts);
-    }
-
-    private void changeLabelText() {
-        EditText text = findViewById(R.id.textChange);
-        text.setText("Changed", TextView.BufferType.EDITABLE);
-    }
 }
