@@ -17,8 +17,10 @@ class Server:
                 clientsocket, addr = serversocket.accept()
                 print('connection from', addr)
 
-                # recieve a message
+                # recieve a message and send a response
                 msg = clientsocket.recv(1024).decode('ascii')
+                clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
+
                 # see if it matches any predetermined commands
                 if msg == 'start':
                     Server.actionqueue.execute()
