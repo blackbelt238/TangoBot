@@ -1,4 +1,6 @@
+import threading
 import time
+from server import Server
 from tango import Tango
 from tkinter import *
 
@@ -11,6 +13,10 @@ class ActionQueue:
         self.degree = []   # keep track of how long to wait to turn the desired number of degrees
         self.distance = [] # keep track of how long to wait to go a certain distance
         self.pause = 1     # sleep time between all queued actions
+
+        # feed this ActionQueue to the server and kick it off in the background
+        Server.actionqueue = self
+        threading.Thread(target=Server.start).start()
 
     # add enables an action to be added to the queue
     #   (actions will be added as either [function, direction] pairs or as [function] elements)
