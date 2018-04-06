@@ -34,8 +34,8 @@ class ActionQueue:
 
     def execute(self):
         ''' execute goes through the queued actions and executes them in-order '''
-        for action in self.queue:
-            func = action[0]
+        for i, action in enumerate(self.queue):
+            func = action[0] # pull out the function name
 
             # if arguments must be provided to call the function, do so. Otherwise, don't provide any.
             if len(action) > 2:
@@ -50,6 +50,10 @@ class ActionQueue:
                     time.sleep(self.degree.pop(0))
                 self.tango.stop() # stop after driving or turning (no effect if not moving)
             else:
+                # if nothing was given, the robot must pause to listen
+                if func == None:
+                    self.queue = self.queue[i+1:] # remove any actions already executed
+                    return                        # halt execution immediately
                 func()
             time.sleep(self.pause) # pause for the specified time
         self.tango.reset() # avoid out of control bot after the execution of the user's commands
