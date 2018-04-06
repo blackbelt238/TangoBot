@@ -66,9 +66,9 @@ public class PocketSphinxActivity extends Activity implements
     private static final String MENU_SEARCH = "menu";
 
     /* Keyword we are looking for to activate menu */
-    private static final String KEYPHRASE = "okay robot";
+    private static final String KEYPHRASE = "computer";
     private static final String EXIT = "exit";
-    private static final String SENDCOMMAND = "send command";
+    private static final String SENDCOMMAND = "command";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -91,6 +91,7 @@ public class PocketSphinxActivity extends Activity implements
         captions.put(DIGITS_SEARCH, R.string.digits_caption);
         captions.put(PHONE_SEARCH, R.string.phone_caption);
         captions.put(FORECAST_SEARCH, R.string.forecast_caption);
+        captions.put(SENDCOMMAND, R.string.command_caption);
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text))
                 .setText("Preparing the recognizer");
@@ -186,12 +187,12 @@ public class PocketSphinxActivity extends Activity implements
         else if (text.equals(SENDCOMMAND)) {
             switchSearch(SENDCOMMAND);
         }
-        else if (text.equals(DIGITS_SEARCH))
-            switchSearch(DIGITS_SEARCH);
-        else if (text.equals(PHONE_SEARCH))
-            switchSearch(PHONE_SEARCH);
-        else if (text.equals(FORECAST_SEARCH))
-            switchSearch(FORECAST_SEARCH);
+//        else if (text.equals(DIGITS_SEARCH))
+//            switchSearch(DIGITS_SEARCH);
+//        else if (text.equals(PHONE_SEARCH))
+//            switchSearch(PHONE_SEARCH);
+//        else if (text.equals(FORECAST_SEARCH))
+//            switchSearch(FORECAST_SEARCH);
         else
             ((TextView) findViewById(R.id.result_text)).setText(text);
     }
@@ -204,6 +205,13 @@ public class PocketSphinxActivity extends Activity implements
         ((TextView) findViewById(R.id.result_text)).setText("");
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
+
+            System.out.println(recognizer.getSearchName());
+
+            if (recognizer.getSearchName().equals(KWS_SEARCH)) {
+                Client client = new Client("10.180.151.248", 5011, text);
+                client.execute();
+            }
 
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
@@ -255,24 +263,27 @@ public class PocketSphinxActivity extends Activity implements
 
         // Create keyword-activation search.
         recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
-        recognizer.addKeyphraseSearch(KWS_SEARCH, EXIT);
-        recognizer.addKeyphraseSearch(KWS_SEARCH, SENDCOMMAND);
+        //recognizer.addKeyphraseSearch(KWS_SEARCH, EXIT);
+
 
         // Create grammar-based search for selection between demos
         File menuGrammar = new File(assetsDir, "menu.gram");
         recognizer.addGrammarSearch(MENU_SEARCH, menuGrammar);
 
-        // Create grammar-based search for digit recognition
-        File digitsGrammar = new File(assetsDir, "digits.gram");
-        recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
+        File commandGrammar = new File(assetsDir, "command.gram");
+        recognizer.addGrammarSearch(SENDCOMMAND, commandGrammar);
 
-        // Create language model search
-        File languageModel = new File(assetsDir, "weather.dmp");
-        recognizer.addNgramSearch(FORECAST_SEARCH, languageModel);
-
-        // Phonetic search
-        File phoneticModel = new File(assetsDir, "en-phone.dmp");
-        recognizer.addAllphoneSearch(PHONE_SEARCH, phoneticModel);
+//        // Create grammar-based search for digit recognition
+//        File digitsGrammar = new File(assetsDir, "digits.gram");
+//        recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
+//
+//        // Create language model search
+//        File languageModel = new File(assetsDir, "weather.dmp");
+//        recognizer.addNgramSearch(FORECAST_SEARCH, languageModel);
+//
+//        // Phonetic search
+//        File phoneticModel = new File(assetsDir, "en-phone.dmp");
+//        recognizer.addAllphoneSearch(PHONE_SEARCH, phoneticModel);
     }
 
     @Override
