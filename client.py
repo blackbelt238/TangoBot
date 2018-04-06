@@ -15,17 +15,8 @@ class Client:
             print('sending {!r}'.format(message))
             s.sendall(message.encode('ascii'))
 
-            # build the response
-            amount_received = 0
-            amount_expected = len(message)
-            resp = ''
-
-            # incrementally reconstruct the message
-            while amount_received < amount_expected:
-                data = s.recv(16)
-                resp += data.decode('ascii')
-                amount_received += len(data)
-            return resp
+            # return the response
+            return s.recv(1024).decode('ascii')
 
         # close the connection no matter what
         finally:
