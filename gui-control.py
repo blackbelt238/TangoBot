@@ -32,8 +32,8 @@ class ActionQueue:
             action.append(port)
         self.queue.append(action)
 
-    # execute goes through the queued actions and executes them in-order
     def execute(self):
+        ''' execute goes through the queued actions and executes them in-order '''
         for action in self.queue:
             func = action[0]
 
