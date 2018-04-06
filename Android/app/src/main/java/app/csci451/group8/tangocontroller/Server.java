@@ -1,6 +1,12 @@
 package app.csci451.group8.tangocontroller;
 
+import android.app.Notification;
+import android.os.Bundle;
+import android.os.Message;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Inet4Address;
@@ -53,14 +59,21 @@ public class Server {
                     // block the call until connection is created and return
                     // Socket object
                     Socket socket = serverSocket.accept();
+                    System.out.println(socket.getInetAddress() + ":" + socket.getPort());
                     count++;
-                    message += "#" + count + " from "
-                            + socket.getInetAddress() + ":"
-                            + socket.getPort() + "\n";
+                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    message = input.readLine();
+
+                    System.out.println("Didn't get stuck reading");
 
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Message sendMsg = activity.tts.handler.obtainMessage();
+                            Bundle b = new Bundle();
+                            b.putString("TT", message);
+                            sendMsg.setData(b);
+                            activity.tts.handler.sendMessage(sendMsg);
                             activity.responses.setText(message);
                         }
                     });
@@ -95,10 +108,10 @@ public class Server {
             try {
                 outputStream = hostThreadSocket.getOutputStream();
                 PrintStream printStream = new PrintStream(outputStream);
-                printStream.print(msgReply);
+                printStream.println(msgReply);
                 printStream.close();
 
-                message += "replayed: " + msgReply + "\n";
+                //message += "replayed: " + msgReply + "\n";
 
                 activity.runOnUiThread(new Runnable() {
 
@@ -114,14 +127,14 @@ public class Server {
                 message += "Something wrong! " + e.toString() + "\n";
             }
 
-            activity.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    System.out.println(message);
-                    activity.responses.setText(message);
-                }
-            });
+//            activity.runOnUiThread(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    System.out.println(message);
+//                    activity.responses.setText(message);
+//                }
+//            });
         }
 
     }

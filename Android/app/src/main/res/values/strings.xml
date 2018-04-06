@@ -10,5 +10,6 @@
     <string name="digits_caption">To try recognition of digits: say something like \"one two three four five\".</string>
     <string name="forecast_caption">To try recognition of a weather forecast like \"sunny spells on Wednesday\".</string>
     <string name="phone_caption">To try phonetic recognition say anything.</string>
-    <string name="command_caption">Say a command</string>
+    <string name="command_caption">Say one of the following commands: drive</string>
+    <string name="pi_ip">10.200.33.236</string>
 </resources>

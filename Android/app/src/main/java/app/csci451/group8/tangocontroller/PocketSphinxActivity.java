@@ -60,15 +60,13 @@ public class PocketSphinxActivity extends Activity implements
 
     /* Named searches allow to quickly reconfigure the decoder */
     private static final String KWS_SEARCH = "wakeup";
-    private static final String FORECAST_SEARCH = "forecast";
-    private static final String DIGITS_SEARCH = "digits";
-    private static final String PHONE_SEARCH = "phones";
     private static final String MENU_SEARCH = "menu";
+    private static final String SENDCOMMAND = "command";
+    private static final String CONTINUE = "continue";
+    private static final String START = "start";
 
     /* Keyword we are looking for to activate menu */
-    private static final String KEYPHRASE = "computer";
-    private static final String EXIT = "exit";
-    private static final String SENDCOMMAND = "command";
+    private static final String KEYPHRASE = "tango";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -88,9 +86,6 @@ public class PocketSphinxActivity extends Activity implements
         captions = new HashMap<>();
         captions.put(KWS_SEARCH, R.string.kws_caption);
         captions.put(MENU_SEARCH, R.string.menu_caption);
-        captions.put(DIGITS_SEARCH, R.string.digits_caption);
-        captions.put(PHONE_SEARCH, R.string.phone_caption);
-        captions.put(FORECAST_SEARCH, R.string.forecast_caption);
         captions.put(SENDCOMMAND, R.string.command_caption);
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text))
@@ -180,19 +175,9 @@ public class PocketSphinxActivity extends Activity implements
         String text = hypothesis.getHypstr();
         if (text.equals(KEYPHRASE))
             switchSearch(MENU_SEARCH);
-        else if (text.equals(EXIT)) {
-            System.out.println("Trying to exit");
-            finish();
-        }
         else if (text.equals(SENDCOMMAND)) {
             switchSearch(SENDCOMMAND);
         }
-//        else if (text.equals(DIGITS_SEARCH))
-//            switchSearch(DIGITS_SEARCH);
-//        else if (text.equals(PHONE_SEARCH))
-//            switchSearch(PHONE_SEARCH);
-//        else if (text.equals(FORECAST_SEARCH))
-//            switchSearch(FORECAST_SEARCH);
         else
             ((TextView) findViewById(R.id.result_text)).setText(text);
     }
@@ -208,8 +193,11 @@ public class PocketSphinxActivity extends Activity implements
 
             System.out.println(recognizer.getSearchName());
 
-            if (recognizer.getSearchName().equals(KWS_SEARCH)) {
-                Client client = new Client("10.180.151.248", 5011, text);
+            String searchName = recognizer.getSearchName();
+            System.out.println(searchName);
+
+            if (searchName != null && (searchName.equals(KWS_SEARCH) || searchName.equals(START) || searchName.equals(CONTINUE))) {
+                Client client = new Client(getString(R.string.pi_ip), 5011, text);
                 client.execute();
             }
 

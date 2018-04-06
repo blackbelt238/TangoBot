@@ -34,7 +34,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
             socket = new Socket(dstAddress, dstPort);
 
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            out.print(textResponse);
+            out.println(textResponse);
 
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
