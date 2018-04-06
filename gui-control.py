@@ -149,7 +149,7 @@ class NestedWindow():
 
         p2 = Button(self.window, text='\"In Response\"', width = self.sideWidth, height = self.sideHeight, command = lambda: self.queue.add(self.queue.tango.speak,'in response'))
         p2.grid(row=0, column=1)
-        
+
     # turn_buttons populates the window with all buttons relating to getting the robot to turn
     def turn_buttons(self):
         # buttons for causing a turn
@@ -226,7 +226,7 @@ class BlockWindow():
         turn.place(x=(self.commandButtonWidth * 2),y=300)
 
         speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
-        turn.place(x=(self.commandButtonWidth * 2),y=400)
+        speak.place(x=(self.commandButtonWidth * 2),y=400)
 
     def create_command_boxes(self):
         self.boxes = []
