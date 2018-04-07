@@ -197,7 +197,7 @@ class NestedWindow():
 # BlockWindow is the home window for controlling Tango
 class BlockWindow():
     commandButtonWidth = 10
-    commandButtonHeight = 5
+    commandButtonHeight = 4
 
     queueButtonWidth = 10
     queueButtonHeight = 3
@@ -238,19 +238,19 @@ class BlockWindow():
         head.place(x=(self.commandButtonWidth * 2),y=0)
 
         torso = Button(self.root, text = 'Torso', width = self.commandButtonWidth, height = self.commandButtonHeight,  command = lambda: self.make_nested('torso'))
-        torso.place(x=(self.commandButtonWidth * 2),y=100)
+        torso.place(x=(self.commandButtonWidth * 2),y=75)
 
         drive = Button(self.root, text = 'Drive', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('drive'))
-        drive.place(x=(self.commandButtonWidth * 2),y=200)
+        drive.place(x=(self.commandButtonWidth * 2),y=150)
 
         turn = Button(self.root, text = 'Turn', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('turn'))
-        turn.place(x=(self.commandButtonWidth * 2),y=300)
+        turn.place(x=(self.commandButtonWidth * 2),y=225)
 
         speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
-        speak.place(x=(self.commandButtonWidth * 2),y=400)
+        speak.place(x=(self.commandButtonWidth * 2),y=300)
 
         listen = Button(self.root, text = 'Listen', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.queue.add(None)) # the None here leads to pausing during execution
-        listen.place(x=(self.commandButtonWidth * 2),y=500)
+        listen.place(x=(self.commandButtonWidth * 2),y=375)
 
     def create_command_boxes(self):
         self.boxes = []
