@@ -4,7 +4,7 @@ from threading import Thread
 class Server(Thread):
     ''' Server allows the standing up of a server to listen for connections, echoing back any message it recieves '''
 
-    def __init__(self, aq, addr=socket.gethostbyname(socket.gethostname()), port=5011):
+    def __init__(self, aq, addr='10.200.3.99', port=5011):
         Thread.__init__(self)
         self.saddr = (addr, port)  # create the server address using the local machine name
         self.actionqueue = aq      # the ActionQueue the server is running alongside
@@ -27,19 +27,20 @@ class Server(Thread):
                 print('connection from', addr)
 
                 # recieve a message and send a response
-                msg = clientsocket.recv(1024).decode('ascii')
-                print('\tsending:',msg)
+                msg = clientsocket.recv(1024).decode('ascii').replace('\n', '')
+                print('\treceived:',msg)
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
+                print('\tresponse sent')
 
                 # see if it matches any predetermined commands
                 if msg == 'start' or msg == 'continue':
-                    Server.actionqueue.execute()
+                    self.actionqueue.execute()
                 elif msg == 'say hello':
                     # Tango says "hello" and raises his head
-                    self.queue.push(self.queue.tango.head,False,4)
-                    self.queue.push(self.queue.tango.head,True,4)
-                    Server.actionqueue.queue.push(self.queue.tango.speak,'hello')
-                    Server.actionqueue.execute()
+                    self.actionqueue.queue.push(self.actionqueue.queue.tango.head,False,4)
+                    self.actionqueue.queue.push(self.actionqueue.queue.tango.head,True,4)
+                    self.actionqueue.queue.push(self.queue.tango.speak,'hello')
+                    self.actionqueue.execute()
         finally:
             # Clean up the connection no matter what
             clientsocket.close()
