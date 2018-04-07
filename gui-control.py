@@ -9,8 +9,8 @@ class ActionQueue:
         self.tango = Tango()
         self.queue = []    # queue of actions
 
-        self.degree = []   # keep track of how long to wait to turn the desired number of degrees
-        self.distance = [] # keep track of how long to wait to go a certain distance
+        self.degree = []   # degree contains amounts by which to turn in the order they were added
+        self.distance = [] # distance contains distances to travel in the order they were added
         self.pause = 1     # sleep time between all queued actions
 
         # feed this ActionQueue to the server and kick it off in the background
@@ -42,7 +42,7 @@ class ActionQueue:
             action.append(port)
         return action
 
-    def execute(self):
+    def execute(self): # TODO: incrementally remove actions from queue directly following execution
         ''' execute goes through the queued actions and executes them in-order '''
         for i, action in enumerate(self.queue):
             func = action[0] # pull out the function name
@@ -67,6 +67,7 @@ class ActionQueue:
                 func()
             time.sleep(self.pause) # pause for the specified time
         self.tango.reset() # avoid out of control bot after the execution of the user's commands
+        self.queue = []    # remove all actions from queue
 
     # remove takes the action at the given index out of the action queue
     def remove(self, index):
