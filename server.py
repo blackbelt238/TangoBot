@@ -35,11 +35,11 @@ class Server(Thread):
                 # see if it matches any predetermined commands
                 if msg == 'start' or msg == 'continue':
                     self.actionqueue.execute()
-                elif msg == 'say hello':
+                elif msg == 'speak hello there':
                     # Tango says "hello" and raises his head
-                    self.actionqueue.queue.push(self.actionqueue.queue.tango.head,False,4)
-                    self.actionqueue.queue.push(self.actionqueue.queue.tango.head,True,4)
-                    self.actionqueue.queue.push(self.queue.tango.speak,'hello')
+                    self.actionqueue.push(self.actionqueue.tango.head,False,4)
+                    self.actionqueue.push(self.actionqueue.tango.head,True,4)
+                    self.actionqueue.push(self.actionqueue.tango.speak,'hello there')
                     self.actionqueue.execute()
         finally:
             # Clean up the connection no matter what
