@@ -21,7 +21,7 @@ class Server(Thread):
 
         clientsocket = None
         try:
-            while True:
+            while True: # NOTE: ADD LOGIC TO LISTEN FOR THE PHRASE 'ADD', WHERE THE COMMANDS ARE ADDED TO THE QUEUE BUT NOT IMMEDIATELY EXECUTED
                 # wait for a connection
                 clientsocket, addr = serversocket.accept()
                 print('connection from', addr)
