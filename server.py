@@ -38,7 +38,7 @@ class Server(Thread):
             # Clean up the connection no matter what
             clientsocket.close()
 
-    def doAction(msg, add):
+    def doAction(self, msg, add):
         ''' doAction performs the action  '''
         accepted = True # indication of if the received phrase is accepted
 
