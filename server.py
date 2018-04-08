@@ -27,14 +27,14 @@ class Server(Thread):
                 print('connection from', addr)
 
                 # receive a message and send a response
-                msg = clientsocket.recv(1024).decode('ascii').replace('\n', '')
-                print('  received: \"' + msg + '\"...', end='')
+                msg = clientsocket.recv(1024).decode('ascii')
+                print('  received: \"' + msg.replace('\n', '') + '\"...', end='')
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
                 print('response sent')
 
                 # save the first word in the message and remove it if it is "add"
                 first = msg.split(' ')[0]
-                msg = msg.replace('add ','')
+                msg = msg.replace('add ','').replace('\n', '')
 
                 # perform an action based on the given message
                 self.doAction(msg, first == 'add')
