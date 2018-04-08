@@ -22,6 +22,10 @@ class ActionQueue:
     def add(self, function, direction=None, port=None):
         self.queue.append(self.buildAction(function, direction, port))
 
+    def pop(self):
+        ''' pop removes the first action in the queue '''
+        self.queue.pop(0)
+
     def push(self, function, direction=None, port=None):
         ''' push adds an action to the front of the queue.
 

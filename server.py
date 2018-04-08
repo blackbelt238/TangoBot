@@ -21,26 +21,52 @@ class Server(Thread):
 
         clientsocket = None
         try:
-            while True: # NOTE: ADD LOGIC TO LISTEN FOR THE PHRASE 'ADD', WHERE THE COMMANDS ARE ADDED TO THE QUEUE BUT NOT IMMEDIATELY EXECUTED
+            while True:
                 # wait for a connection
                 clientsocket, addr = serversocket.accept()
                 print('connection from', addr)
 
-                # recieve a message and send a response
+                # receive a message and send a response
                 msg = clientsocket.recv(1024).decode('ascii').replace('\n', '')
-                print('\treceived:',msg)
+                print('  received: \"' + msg + '\"...', end='')
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
-                print('\tresponse sent')
+                print('response sent')
 
-                # see if it matches any predetermined commands
-                if msg == 'start' or msg == 'continue':
-                    self.actionqueue.execute()
-                elif msg == 'speak hello there':
-                    # Tango says "hello" and raises his head
-                    self.actionqueue.push(self.actionqueue.tango.head,False,4)
-                    self.actionqueue.push(self.actionqueue.tango.head,True,4)
-                    self.actionqueue.push(self.actionqueue.tango.speak,'hello there')
-                    self.actionqueue.execute()
+                # perform an action based on the given message
+                self.doAction(msg, msg.split(' ')[0] == 'add')
         finally:
             # Clean up the connection no matter what
             clientsocket.close()
+
+    def doAction(msg, add):
+        ''' doAction performs the action  '''
+        accepted = True # indication of if the received phrase is accepted
+
+        # if the action will be immediately executed, ensure Tango bot listens after
+        if !add:
+            self.actionqueue.push(None)
+
+        # --- ACCEPTED PHRASES ---
+        if msg == 'start' or msg == 'continue':
+            print('\texecuting actions')
+        elif msg == 'speak hello there':
+            # Tango says "hello" and raises his head
+            self.actionqueue.push(self.actionqueue.tango.head,False,4)
+            self.actionqueue.push(self.actionqueue.tango.head,True,4)
+            self.actionqueue.push(self.actionqueue.tango.speak,'hello there')
+        else:
+            accepted = False
+
+        # if the phrase wasn't accepted and a listen command was already pushed, pop it before exiting
+        if !accepted and !add:
+            print('\tnot an accepted phrase')
+            self.actionqueue.pop()
+            return
+        # if the phrase wasn't accepted and no listen command was pushed, just exit
+        elif !accepted:
+            print('\tnot an accepted phrase')
+            return
+
+        # immediately perform the given command if not instructed to add it
+        if !add:
+            self.actionqueue.execute()
