@@ -52,7 +52,7 @@ class Server(Thread):
 
         # --- ACCEPTED PHRASES ---
         if msg == 'start' or msg == 'continue':
-            print('\texecuting actions')
+            self.actionqueue.pop() # don't listen after executing
         elif msg == 'speak hello there':
             # Tango says "hello" and raises his head
             self.actionqueue.push(self.actionqueue.tango.head,False,4)

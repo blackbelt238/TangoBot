@@ -35,7 +35,7 @@ class ActionQueue:
 
     def buildAction(self, function, direction=None, port=None):
         ''' buildAction returns the action formatted as a list to be added to the queue '''
-        print('\tadding:', function, direction, port)
+        print('    adding:', function, direction, port)
         action = [function] # form the action by first adding the function to be invoked
 
         # if a direction is provided, tack it on to the action (this allows us to add calls with no arguments to the queue)
