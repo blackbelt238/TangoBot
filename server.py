@@ -43,7 +43,7 @@ class Server(Thread):
         accepted = True # indication of if the received phrase is accepted
 
         # if the action will be immediately executed, ensure Tango bot listens after
-        if !add:
+        if not add:
             self.actionqueue.push(None)
 
         # --- ACCEPTED PHRASES ---
@@ -58,15 +58,15 @@ class Server(Thread):
             accepted = False
 
         # if the phrase wasn't accepted and a listen command was already pushed, pop it before exiting
-        if !accepted and !add:
+        if not accepted and not add:
             print('\tnot an accepted phrase')
             self.actionqueue.pop()
             return
         # if the phrase wasn't accepted and no listen command was pushed, just exit
-        elif !accepted:
+        elif not accepted:
             print('\tnot an accepted phrase')
             return
 
         # immediately perform the given command if not instructed to add it
-        if !add:
+        if not add:
             self.actionqueue.execute()
