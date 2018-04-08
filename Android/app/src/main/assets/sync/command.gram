@@ -12,7 +12,7 @@ grammar command;
 
 <turn_dir> = left | right;
 
-<angle> = (forty-five | ninety) degrees;
+<angle> = forty-five | ninety;
 
 <direction> = forward | backward;
 
