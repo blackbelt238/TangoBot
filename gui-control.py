@@ -22,6 +22,10 @@ class ActionQueue:
     def add(self, function, direction=None, port=None):
         self.queue.append(self.buildAction(function, direction, port))
 
+    def pop(self):
+        ''' pop removes the first action in the queue '''
+        self.queue.pop(0)
+
     def push(self, function, direction=None, port=None):
         ''' push adds an action to the front of the queue.
 
@@ -249,7 +253,7 @@ class BlockWindow():
         speak = Button(self.root, text = 'Speak', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.make_nested('speak'))
         speak.place(x=(self.commandButtonWidth * 2),y=300)
 
-        listen = Button(self.root, text = 'Listen', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.queue.add(None)) # the None here leads to pausing during execution
+        listen = Button(self.root, text = 'Listen', width = self.commandButtonWidth, height = self.commandButtonHeight, command = lambda: self.queue.add(None)) # NOTE: spawn a sub-window with all options
         listen.place(x=(self.commandButtonWidth * 2),y=375)
 
     def create_command_boxes(self):
@@ -272,7 +276,9 @@ class BlockWindow():
         # update all boxes referring to actions
         for action in self.queue.queue:
             box = self.boxes[index]
-            fname = action[0].__name__[action[0].__name__.rfind('.')+1:]
+            fname = 'listen'
+            if action[0] != None:
+                fname = action[0].__name__[action[0].__name__.rfind('.')+1:]
             box.config(text=fname)
             index += 1
         # clear all boxes no longer referring to actions
