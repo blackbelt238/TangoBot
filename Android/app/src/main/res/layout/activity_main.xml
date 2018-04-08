@@ -9,44 +9,51 @@
     <RelativeLayout
         android:layout_width="360dp"
         android:layout_height="501dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="2dp">
-
-        <TextView
-            android:id="@+id/messageView"
-            android:layout_width="109dp"
-            android:layout_height="289dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="23dp"
-            android:text="Client Message" />
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="5dp">
 
         <TextView
             android:id="@+id/ipNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="31dp"
-            android:layout_marginTop="38dp"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="55dp"
             android:text="IP NUMBER" />
 
         <Button
-            android:id="@+id/clientButton"
+            android:id="@+id/ipButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/ipNum"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ipInput"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="41dp"
             android:text="Button" />
 
+        <EditText
+            android:id="@+id/ipInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ipButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/ipButton"
+            android:layout_marginTop="39dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
         <TextView
-            android:id="@+id/clientText"
-            android:layout_width="136dp"
-            android:layout_height="284dp"
-            android:layout_alignStart="@+id/clientButton"
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ipButton"
+            android:layout_alignStart="@+id/ipButton"
             android:layout_centerVertical="true"
-            android:layout_marginStart="-19dp"
-            android:text="This is a message to send to the client" />
+            android:text="Android IP Number" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

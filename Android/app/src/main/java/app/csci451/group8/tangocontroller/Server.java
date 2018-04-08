@@ -74,7 +74,7 @@ public class Server {
                             b.putString("TT", message);
                             sendMsg.setData(b);
                             activity.tts.handler.sendMessage(sendMsg);
-                            activity.responses.setText(message);
+                            //activity.responses.setText(message);
                         }
                     });
 
@@ -113,13 +113,6 @@ public class Server {
 
                 //message += "replayed: " + msgReply + "\n";
 
-                activity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        activity.responses.setText(message);
-                    }
-                });
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block

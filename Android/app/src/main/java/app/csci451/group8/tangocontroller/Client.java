@@ -3,10 +3,12 @@ package app.csci451.group8.tangocontroller;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -14,6 +16,7 @@ import java.net.UnknownHostException;
 
 public class Client extends AsyncTask<Void, Void, Void> {
 
+    public String responseAddr = null;
     String dstAddress;
     int dstPort;
     String response = "";
@@ -35,6 +38,10 @@ public class Client extends AsyncTask<Void, Void, Void> {
 
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             out.println(textResponse);
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            response = input.readLine();
+            System.out.println("Response is: " + response);
 
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block

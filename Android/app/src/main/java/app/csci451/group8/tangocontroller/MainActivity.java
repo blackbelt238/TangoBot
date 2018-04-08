@@ -9,16 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import edu.cmu.pocketsphinx.SpeechRecognizer;
-
 
 // STT HELP FROM https://www.vladmarton.com/pocketsphinx-continuous-speech-recognition-android-tutorial/
 // USING POCKETSPHINX LIBRARY FOR STT
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView responses, clientText;
-    Button clientButton;
+    TextView responses;
+    EditText ipInput;
+    Button ipButton;
     Server server;
     TTS tts;
 
@@ -27,30 +26,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        responses = findViewById(R.id.messageView);
-        clientText = findViewById(R.id.clientText);
-
-        clientButton = findViewById(R.id.clientButton);
-        clientButton.setOnClickListener(this);
+        ipButton = findViewById(R.id.ipButton);
+        ipButton.setOnClickListener(this);
 
         TextView ipNum = findViewById(R.id.ipNum);
-        tts = new TTS(this);
-        tts.start();
-
         server = new Server(this);
         ipNum.setText(server.getIpAddress());
-        Intent speech = new Intent(this, PocketSphinxActivity.class);
-        startActivity(speech);
+
+        ipInput = findViewById(R.id.ipInput);
 
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.clientButton:
-                Client client = new Client(getString(R.string.pi_ip), 5011, clientText.getText().toString());
-                client.execute();
+            case R.id.ipButton:
+                if (checkConnection()) {
+                    tts = new TTS(this);
+                    tts.start();
+
+                    Intent speech = new Intent(this, PocketSphinxActivity.class);
+                    startActivity(speech);
+                }
                 break;
         }
+    }
+
+    private boolean checkConnection() {
+        String ip = ipInput.getText().toString();
+        if (ip.isEmpty()) {
+            return false;
+        }
+        Client checkResponse = new Client(ip, 5011, "Test");
+        checkResponse.execute();
+
+        if (checkResponse.responseAddr != null) {
+            return true;
+        }
+        return false;
     }
 
 }
