@@ -61,18 +61,18 @@ class Server(Thread):
             self.actionqueue.push(self.actionqueue.tango.speak,'hello there')
         elif msglist[0] == 'turn':
             deg = self.translateNumber(msglist[2])
-            dir = False
+            direction = False
             if msglist[1] == 'left':
-                dir = True
+                direction = True
             self.actionqueue.degree.insert(0, self.actionqueue.angle(deg))
-            self.actionqueue.push(self.actionqueue.tango.turn, dir)
+            self.actionqueue.push(self.actionqueue.tango.turn, direction)
         elif msglist[0] == 'drive':
             dist = self.translateNumber(msglist[2])
-            dir = False
+            direction = False
             if msglist[1] == 'forward':
-                dir = True
+                direction = True
             self.actionqueue.distance.insert(0, self.actionqueue.foot(dist))
-            self.actionqueue.push(self.actionqueue.tango.drive, dir)
+            self.actionqueue.push(self.actionqueue.tango.drive, direction)
         else:
             accepted = False
 
