@@ -32,15 +32,19 @@ class Server(Thread):
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
                 print('response sent')
 
+                # save the first word in the message and remove it if it is "add"
+                first = msg.split(' ')[0]
+                msg = msg.replace('add ','')
+
                 # perform an action based on the given message
-                self.doAction(msg, msg.split(' ')[0] == 'add')
+                self.doAction(msg, first == 'add')
         finally:
             # Clean up the connection no matter what
             clientsocket.close()
 
     def doAction(self, msg, add):
-        ''' doAction performs the action  '''
-        accepted = True # indication of if the received phrase is accepted
+        ''' doAction performs the action detailed in the given message '''
+        accepted = True # indication of whether the received phrase is accepted
 
         # if the action will be immediately executed, ensure Tango bot listens after
         if not add:
