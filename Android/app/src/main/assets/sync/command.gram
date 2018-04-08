@@ -2,7 +2,7 @@
 
 grammar command;
 
-<primary_command> = /11/ <drive> | /10/ <turn> | /1/ <speak>;
+<primary_command> = [add] (/11/ <drive> | /10/ <turn> | /1/ <speak>);
 
 <speak> = speak hello there;
 
