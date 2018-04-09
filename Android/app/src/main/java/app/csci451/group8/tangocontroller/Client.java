@@ -40,8 +40,9 @@ public class Client extends AsyncTask<Void, Void, Void> {
             out.println(textResponse);
 
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            response = input.readLine();
-            System.out.println("Response is: " + response);
+            responseAddr = input.readLine();
+
+            System.out.println("Received " + responseAddr);
 
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block

@@ -197,7 +197,7 @@ public class PocketSphinxActivity extends Activity implements
             System.out.println(searchName);
 
             if (searchName != null && (searchName.equals(KWS_SEARCH) || searchName.equals(START) || searchName.equals(CONTINUE))) {
-                Client client = new Client(getString(R.string.pi_ip), 5011, text);
+                Client client = new Client("10.200.3.99", 5011, text);
                 client.execute();
             }
 

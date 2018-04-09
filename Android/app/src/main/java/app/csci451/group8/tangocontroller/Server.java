@@ -45,6 +45,13 @@ public class Server {
         }
     }
 
+    public String filterBadChars(String input) {
+        if (input.indexOf('>') != -1) {
+            return input.substring(input.indexOf('>') + 1);
+        }
+        return input;
+    }
+
     private class SocketServerThread extends Thread {
 
         int count = 0;
@@ -64,14 +71,15 @@ public class Server {
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     message = input.readLine();
 
-                    System.out.println("Didn't get stuck reading");
+                    System.out.println("Message: " + message);
+                    System.out.println("Filtered: " + filterBadChars(message));
 
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Message sendMsg = activity.tts.handler.obtainMessage();
                             Bundle b = new Bundle();
-                            b.putString("TT", message);
+                            b.putString("TT", filterBadChars(message));
                             sendMsg.setData(b);
                             activity.tts.handler.sendMessage(sendMsg);
                             //activity.responses.setText(message);

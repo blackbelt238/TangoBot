@@ -16,6 +16,6 @@ grammar command;
 
 <direction> = forward | backward;
 
-<digit> = one | two | three | four | five | six | seven | eight | nine;
+<digit> = one | two | three | four | five;
 
 public <command> = <primary_command>;

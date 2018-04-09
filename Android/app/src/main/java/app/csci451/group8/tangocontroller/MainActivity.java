@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.concurrent.TimeUnit;
+
 
 // STT HELP FROM https://www.vladmarton.com/pocketsphinx-continuous-speech-recognition-android-tutorial/
 // USING POCKETSPHINX LIBRARY FOR STT
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button ipButton;
     Server server;
     TTS tts;
+    String ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Client checkResponse = new Client(ip, 5011, "Test");
         checkResponse.execute();
 
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (checkResponse.responseAddr != null) {
+            this.ip = ip;
             return true;
         }
         return false;
