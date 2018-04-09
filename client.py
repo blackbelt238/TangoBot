@@ -14,10 +14,10 @@ class Client:
             # Send the message across the socket
             print('sending {!r}'.format(message))
             message += '\n'
-            s.sendall(message.encode('ascii'))
+            s.sendall(message.encode('utf-8'))
 
             # return the response
-            return s.recv(1024).decode('ascii')
+            return s.recv(1024).decode('utf-8')
 
         # close the connection no matter what
         finally:

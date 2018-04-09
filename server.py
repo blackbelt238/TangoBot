@@ -27,7 +27,7 @@ class Server(Thread):
                 print('connection from', addr)
 
                 # receive a message and send a response
-                msg = clientsocket.recv(1024).decode('ascii')
+                msg = clientsocket.recv(1024).decode('utf-8')
                 print('  received: \"' + msg.replace('\n', '') + '\"...', end='')
                 clientsocket.sendall(msg.encode('ascii')) # just send the original message back as the response
                 print('response sent')
@@ -45,6 +45,7 @@ class Server(Thread):
     def doAction(self, msg, add):
         ''' doAction performs the action detailed in the given message '''
         accepted = True # indication of whether the received phrase is accepted
+        msglist = msg.split(' ')
 
         # if the action will be immediately executed, ensure Tango bot listens after
         if not add:
@@ -58,6 +59,20 @@ class Server(Thread):
             self.actionqueue.push(self.actionqueue.tango.head,False,4)
             self.actionqueue.push(self.actionqueue.tango.head,True,4)
             self.actionqueue.push(self.actionqueue.tango.speak,'hello there')
+        elif msglist[0] == 'turn':
+            deg = self.translateNumber(msglist[2])
+            direction = False
+            if msglist[1] == 'left':
+                direction = True
+            self.actionqueue.degree.insert(0, self.actionqueue.angle(deg))
+            self.actionqueue.push(self.actionqueue.tango.turn, direction)
+        elif msglist[0] == 'drive':
+            dist = self.translateNumber(msglist[2])
+            direction = False
+            if msglist[1] == 'forward':
+                direction = True
+            self.actionqueue.distance.insert(0, self.actionqueue.foot(dist))
+            self.actionqueue.push(self.actionqueue.tango.drive, direction)
         else:
             accepted = False
 
@@ -74,3 +89,20 @@ class Server(Thread):
         # immediately perform the given command if not instructed to add it
         if not add:
             self.actionqueue.execute()
+
+    def translateNumber(self, number):
+        ''' translateNumber returns the int version of the given number in word form '''
+        if number == 'ninety':
+            return 90
+        elif number == 'forty-five':
+            return 45
+        elif number == 'one':
+            return 1
+        elif number == 'two':
+            return 2
+        elif number == 'three':
+            return 3
+        elif number == 'four':
+            return 4
+        elif number == 'five':
+            return 5
