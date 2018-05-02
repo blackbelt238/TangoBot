@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RobotAdventure</string>
+
+    <string name="attack_button">Attack</string>
+    <string name="run_button">Run</string>
+
+    <string name="enemy_pic">Enemy Portrait</string>
+    <string name="enemy_name">Placeholder Name</string>
+
+    <string name="pi_ip">10.200.33.236</string>
+    <string name="pi_port">5011</string>
+    <string name="title_activity_move">MoveActivity</string>
+</resources>
